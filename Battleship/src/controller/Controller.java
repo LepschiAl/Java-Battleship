@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
+import java.awt.event.ActionEvent;
+
 public class Controller {
 
     @FXML
@@ -26,5 +28,10 @@ public class Controller {
                 opponentGrid.add(opponentButton, i, j);
             }
         }
+    }
+
+    @FXML
+    public void onPlaceShip(ActionEvent event) {
+
     }
 }
