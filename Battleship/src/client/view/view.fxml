@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="client.controller.Controller"
-            prefHeight="600.0" prefWidth="900.0">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controller.Controller">
 
-    <VBox alignment="CENTER" spacing="20.0" AnchorPane.topAnchor="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
-        <Label text="Schiffe Versenken"/>
+    <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <Label text="Schiffe Versenken" />
 
         <HBox alignment="CENTER" spacing="50.0">
             <!-- Spieler Grid -->
             <VBox alignment="CENTER" spacing="10.0">
-                <Label text="Dein Spielfeld"/>
-                <GridPane fx:id="playerGrid" hgap="2.0" vgap="2.0"/>
+                <Label text="Dein Spielfeld" />
+                <GridPane fx:id="playerGrid" hgap="2.0" vgap="2.0" />
             </VBox>
 
             <!-- Gegner Grid -->
             <VBox alignment="CENTER" spacing="10.0">
-                <Label text="Gegner Spielfeld"/>
-                <GridPane fx:id="opponentGrid" hgap="2.0" vgap="2.0"/>
+                <Label text="Gegner Spielfeld" />
+                <GridPane fx:id="opponentGrid" hgap="2.0" vgap="2.0" />
             </VBox>
         </HBox>
 
         <!-- Controls zum Setzen der Schiffe -->
         <HBox alignment="CENTER" spacing="10.0">
-            <Button text="Schiff setzen" fx:id="placeShipButton"/>
-            <Button text="Spiel starten" fx:id="startGameButton" disable="true"/>
+            <Button fx:id="placeShipButton" text="Schiff setzen" />
+            <Button fx:id="startGameButton" disable="true" onAction="#onStartGame" text="Spiel starten" />
         </HBox>
     </VBox>
 </AnchorPane>
