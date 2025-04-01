@@ -53,6 +53,12 @@ public class Client {
     }
 
     public void endGame(){
-
+        try {
+            if (out != null) out.close();
+            if (in != null) in.close();
+            if (socket != null) socket.close();
+        } catch (IOException e) {
+            System.err.println("Fehler beim Schließen der Verbindung: " + e.getMessage());
+        }
     }
 }

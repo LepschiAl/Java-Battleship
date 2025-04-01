@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controller.WelcomeController">
+    <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
+        <Label text="Schiffe Versenken" style="-fx-font-weight: bold;">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+
+        <ImageView fitHeight="300.0" fitWidth="400.0" preserveRatio="true">
+            <Image url="/client/view/images/Battleship_welcome.jpeg" />
+        </ImageView>
+
+        <Label text="Willkommen Schiffe-Versenken-Spiel !" />
+
+        <Button fx:id="startButton" mnemonicParsing="false" onAction="#startGame" prefHeight="40.0" prefWidth="200.0" text="Spiel starten" />
+    </VBox>
+</AnchorPane>
