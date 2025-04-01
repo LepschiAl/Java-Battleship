@@ -12,6 +12,7 @@ import client.model.Game;
 import server.Server;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Controller {
 
@@ -25,6 +26,8 @@ public class Controller {
     private Button startGameButton;
 
     private Integer maxClicks = 9;
+    private Integer playerShipsHit = 0;
+    private Integer opponentShipsHit = 0;
     private Game game;
     private Client client;
     private Server server;
@@ -75,7 +78,7 @@ public class Controller {
         System.out.println("Schiff gesetzt bei: Spalte " + col + ", Zeile " + row);
 
         button.setText(button.getText().equals("X") ? "" : "X");
-        button.setStyle(shipStyle);
+        button.setStyle(button.getText().equals("X") ? shipStyle : defaultButtonStyle);
         startGameButton.setDisable(!validateInput());
     }
 
@@ -84,6 +87,10 @@ public class Controller {
         if (validateInput()) {
             client.request(-2, -2, false);
             startGameButton.setDisable(true);
+            startGameButton.setVisible(false);
+            placeShipButton.setDisable(true);
+            placeShipButton.setVisible(false);
+
             playerGrid.setDisable(true);
             waitForServerShot();
         }
@@ -126,20 +133,25 @@ public class Controller {
     private void waitForServerShot() {
         Message received = client.receiveFire();
 
-        if (received.x == -1 && received.y == -1) {
-            colorOpponentGrid(latestShot.x, latestShot.y, true);
+        if (received.getX() == -1 && received.getY() == -1) {
+            this.opponentShipsHit++;
+            checkIfGameOver();
+            colorOpponentGrid(latestShot.getX(), latestShot.getY(), true);
             opponentGrid.setDisable(false);
-            new Alert(Alert.AlertType.INFORMATION, "Treffer! Du bist nochmal dran.").showAndWait();
+            new Alert(Alert.AlertType.CONFIRMATION, "Treffer! Du bist nochmal dran.").showAndWait();
         }
-        else if (checkIsHit(received.x, received.y)) {
+        else if (checkIsHit(received.getX(), received.getY())) {
+            this.playerShipsHit++;
+            checkIfGameOver();
             client.request(-1, -1, true);
             colorOwnGrid(received, true);
             opponentGrid.setDisable(true);
-            new Alert(Alert.AlertType.INFORMATION, "Gegner traf dein Schiff!").showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Gegner traf dein Schiff!").showAndWait();
             waitForServerShot();
         }
         else {
             colorOwnGrid(received, false);
+            colorOpponentGrid(latestShot.getX(), latestShot.getY(), false);
             opponentGrid.setDisable(false);
             new Alert(Alert.AlertType.INFORMATION, "Gegner schoss daneben. Dein Zug!").showAndWait();
         }
@@ -148,7 +160,7 @@ public class Controller {
     private void colorOwnGrid(Message message, boolean isHit) {
         if (message == null) return;
         for (Node node : playerGrid.getChildren()) {
-            if (GridPane.getColumnIndex(node) == message.x && GridPane.getRowIndex(node) == message.y) {
+            if (GridPane.getColumnIndex(node) == message.getX() && GridPane.getRowIndex(node) == message.getY()) {
                 Button button = (Button) node;
                 if (isHit) {
                     button.setStyle(hitStyle);
@@ -165,9 +177,23 @@ public class Controller {
             if (GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y) {
                 Button button = (Button) node;
                 button.setStyle(isHit ? opponentHitStyle : missStyle);
+                button.setText(isHit ? "X" : "O");
                 button.setDisable(true);
                 break;
             }
+        }
+    }
+
+    private void checkIfGameOver() {
+        if (Objects.equals(this.playerShipsHit, maxClicks)) {
+            Alert a = new Alert(Alert.AlertType.INFORMATION, "Game Over - You lost");
+            a.showAndWait();
+            client.endGame();
+        }
+        else if (Objects.equals(this.opponentShipsHit, maxClicks)) {
+            Alert a = new Alert(Alert.AlertType.INFORMATION, "Game Over - You won");
+            a.showAndWait();
+            client.endGame();
         }
     }
 }

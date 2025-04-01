@@ -29,17 +29,17 @@ public class GameHandler implements Runnable {
                 Message message = (Message) in.readObject();
                 System.out.println("Nachricht empfangen: " + message);
 
-                if (message.x == -2 && message.y == -2) { // Spielstart
+                if (message.getX() == -2 && message.getY() == -2) { // Gamestart
                     placeShips();
                     fireRandomShot(out);
                 }
-                else if (message.x == -1 && message.y == -1) {
+                else if (message.getX() == -1 && message.getY() == -1) { // Server hit a ship with last shot
                     fireRandomShot(out);
                 }
-                else if (message.x >= 0 && message.y >= 0) { // Schuss des Clients
-                    boolean hit = checkIsHit(message.x, message.y);
-                    if (hit) {out.writeObject(new Message(-1, -1, hit));}
-                    if (!hit) fireRandomShot(out);
+                else if (message.getX() >= 0 && message.getY() >= 0) { // Client shot
+                    boolean hit = checkIsHit(message.getX(), message.getY());
+                    if (hit) {out.writeObject(new Message(-1, -1, hit));} // Client has hit
+                    if (!hit) fireRandomShot(out); // Client has not hit
                 }
             }
         } catch (Exception e) {
